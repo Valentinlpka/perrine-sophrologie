@@ -38,6 +38,9 @@ const Navbar = () => {
           <Link href="#contact" className="text-black hover:font-bold">
             Contact
           </Link>
+          <Link href="/blog" className="text-black hover:font-bold">
+            Blog
+          </Link>
 
           <Link
             target="_blank"

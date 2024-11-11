@@ -132,7 +132,7 @@ export default function BlogPage() {
                         </div>
                         <input
                             type="text"
-                            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-300 focus:border-orange-300"
                             placeholder="Rechercher un article..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -143,7 +143,7 @@ export default function BlogPage() {
                         <select
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md"
+                            className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-orange-300 focus:border-orange-300 rounded-md"
                         >
                             <option value="">Toutes les catégories</option>
                             {categories.map((category) => (
@@ -189,13 +189,13 @@ export default function BlogPage() {
                                         className="object-cover w-full h-48 group-hover:scale-105 transition-transform duration-300"
                                     />
                                     <div className="absolute top-4 right-4">
-                                        <span className="px-3 py-1 text-sm font-medium bg-white rounded-full text-indigo-600">
+                                        <span className="px-3 py-1 text-sm font-medium bg-white rounded-full text-orange-300">
                                             {article.category}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="p-6">
-                                    <h2 className="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300">
+                                    <h2 className="text-xl font-semibold text-gray-900 group-hover:text-orange-300 transition-colors duration-300">
                                         {article.title}
                                     </h2>
                                     <p className="mt-3 text-gray-600 line-clamp-2">
@@ -236,7 +236,7 @@ export default function BlogPage() {
                                     key={i + 1}
                                     onClick={() => setCurrentPage(i + 1)}
                                     className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${currentPage === i + 1
-                                        ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                        ? 'z-10 bg-indigo-50 border-orange-300 text-orange-300'
                                         : 'bg-white text-gray-500 hover:bg-gray-50'
                                         }`}
                                 >

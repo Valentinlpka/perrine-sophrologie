@@ -88,7 +88,7 @@ export default function ArticleDetail({
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-300"></div>
             </div>
         );
     }
@@ -110,7 +110,7 @@ export default function ArticleDetail({
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
                     <div className="max-w-4xl mx-auto">
                         <Link
-                            href="/articles"
+                            href="/blog"
                             className="inline-flex items-center text-white mb-4 hover:underline"
                         >
                             <ChevronLeftIcon className="h-5 w-5 mr-2" />
@@ -166,10 +166,10 @@ export default function ArticleDetail({
                                         />
                                     </div>
                                     <div className="p-4">
-                                        <p className="text-sm text-indigo-600 mb-2">
+                                        <p className="text-sm text-orange-300 mb-2">
                                             {article.category}
                                         </p>
-                                        <h3 className="font-bold mb-2 group-hover:text-indigo-600">
+                                        <h3 className="font-bold mb-2 group-hover:text-orange-300">
                                             {article.title}
                                         </h3>
                                         <p className="text-sm text-gray-600 mb-2">
@@ -202,10 +202,10 @@ export default function ArticleDetail({
                                             />
                                         </div>
                                         <div className="p-4">
-                                            <p className="text-sm text-indigo-600 mb-2">
+                                            <p className="text-sm text-orange-300 mb-2">
                                                 {article.category}
                                             </p>
-                                            <h3 className="font-bold mb-2 group-hover:text-indigo-600">
+                                            <h3 className="font-bold mb-2 group-hover:text-orange-300">
                                                 {article.title}
                                             </h3>
                                             <p className="text-gray-600 text-sm line-clamp-2">

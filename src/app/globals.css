@@ -9,12 +9,8 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+
+
 
 body {
   color: var(--foreground);
@@ -129,18 +125,6 @@ body {
     @apply list-decimal pl-6 mb-4;
 }
 
-/* Styles pour l'éditeur */
-.ql-editor {
-    @apply min-h-[300px];
-}
-
-.ql-toolbar {
-    @apply border-gray-300 rounded-t-md !important;
-}
-
-.ql-container {
-    @apply border-gray-300 rounded-b-md !important;
-}
 
 /* Animation de pulsation pour le placeholder de chargement */
 @keyframes pulse {
@@ -186,4 +170,35 @@ body {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+/* Styles pour l'éditeur ReactQuill */
+.ql-container {
+  min-height: 200px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.ql-editor {
+  min-height: 200px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+/* Assure que la barre d'outils reste visible */
+.ql-toolbar.ql-snow {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.ql-container.ql-snow {
+  border: 1px solid #e5e7eb;
+  border-top: 0;
+  border-radius: 0 0 0.375rem 0.375rem;
+  margin-bottom: 2rem;
+}
+
+/* Ajustement pour le conteneur fixe en bas */
+form {
+  padding-bottom: 80px; /* Espace pour les boutons fixes */
 }
