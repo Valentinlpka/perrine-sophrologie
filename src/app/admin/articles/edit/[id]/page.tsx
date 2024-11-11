@@ -32,7 +32,7 @@ export default function EditArticlePage({ params }: { params: { id: string } }) 
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className="text-3xl font-bold my-4">Editer l'article</h1>
+            <h1 className="text-3xl font-bold my-4">Editer l&apos;article</h1>
             <ArticleForm article={article} />
         </div>
     );

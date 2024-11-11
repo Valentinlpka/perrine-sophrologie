@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -101,7 +102,7 @@ export default function ArticleDetail({
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section avec image */}
             <div className="relative h-[60vh] w-full">
-                <img
+                <Image
                     src={article.image_url || "/placeholder-image.jpg"}
                     alt={article.title}
                     className="w-full h-full object-cover"
@@ -159,7 +160,7 @@ export default function ArticleDetail({
                             >
                                 <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                                     <div className="h-48 overflow-hidden">
-                                        <img
+                                        <Image
                                             src={article.image_url || "/placeholder-image.jpg"}
                                             alt={article.title}
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -195,7 +196,7 @@ export default function ArticleDetail({
                                 >
                                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                                         <div className="h-48 overflow-hidden">
-                                            <img
+                                            <Image
                                                 src={article.image_url || "/placeholder-image.jpg"}
                                                 alt={article.title}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

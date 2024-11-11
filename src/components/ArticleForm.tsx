@@ -5,6 +5,7 @@ import { DocumentDuplicateIcon, EyeIcon, TrashIcon } from '@heroicons/react/24/o
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
@@ -251,7 +252,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                             />
                             {imageUrl && (
                                 <div className="mt-2 h-32 w-full rounded-xl overflow-hidden border border-gray-200">
-                                    <img
+                                    <Image
                                         src={imageUrl}
                                         alt="Aperçu"
                                         className="h-full w-full object-cover"

@@ -116,7 +116,7 @@ export default function Home() {
         <div className="bg-kaki">
           <div className="mx-auto container px-10 py-10">
             <h3 className="text-white text-2xl pb-5 font-bold">
-              La sophrologie c'est quoi ?
+              La sophrologie c&apos;est quoi ?
             </h3>
             <Accordion
               type="single"
@@ -125,7 +125,7 @@ export default function Home() {
             >
               <AccordionItem value="item-1">
                 <AccordionTrigger>
-                  Qu'est ce que la sophrologie ?
+                  Qu&apos;est ce que la sophrologie ?
                 </AccordionTrigger>
                 <AccordionContent>
                   La sophrologie est une méthode de relaxation utilisant la

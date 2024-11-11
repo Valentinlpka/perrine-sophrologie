@@ -6,8 +6,9 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import debounce from 'lodash/debounce';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Article {
     id: number;
@@ -38,28 +39,7 @@ export default function BlogPage() {
 
     const supabase = createClientComponentClient();
 
-    const fetchCategories = async () => {
-        const { data: articles } = await supabase
-            .from('articles')
-            .select('category')
-            .eq('is_active', true);
 
-        if (articles) {
-            const categoryCount = articles.reduce((acc: { [key: string]: number }, article) => {
-                if (article.category) {
-                    acc[article.category] = (acc[article.category] || 0) + 1;
-                }
-                return acc;
-            }, {});
-
-            const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
-                name,
-                count
-            }));
-
-            setCategories(formattedCategories);
-        }
-    };
 
     const fetchArticles = async () => {
         setIsLoading(true);
@@ -98,9 +78,36 @@ export default function BlogPage() {
 
     const debouncedFetch = debounce(fetchArticles, 300);
 
+    const fetchCategories = useCallback(async () => {
+
+        const { data: articles } = await supabase
+            .from('articles')
+            .select('category')
+            .eq('is_active', true);
+
+        if (articles) {
+            const categoryCount = articles.reduce((acc: { [key: string]: number }, article) => {
+                if (article.category) {
+                    acc[article.category] = (acc[article.category] || 0) + 1;
+                }
+                return acc;
+            }, {});
+
+            const formattedCategories = Object.entries(categoryCount).map(([name, count]) => ({
+                name,
+                count
+            }));
+
+            setCategories(formattedCategories);
+        }
+
+        // ... votre code existant
+    }, []); // pas de dépendances si la fonction ne dépend de rien d'externe
+
     useEffect(() => {
         fetchCategories();
-    }, []);
+    }, [fetchCategories]);
+
 
     useEffect(() => {
         debouncedFetch();
@@ -183,7 +190,7 @@ export default function BlogPage() {
                                 className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                             >
                                 <div className="aspect-w-16 aspect-h-9 relative">
-                                    <img
+                                    <Image
                                         src={article.image_url || '/images/placeholder.jpg'}
                                         alt={article.title}
                                         className="object-cover w-full h-48 group-hover:scale-105 transition-transform duration-300"

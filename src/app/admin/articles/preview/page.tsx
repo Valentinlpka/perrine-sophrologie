@@ -4,6 +4,7 @@
 import { BookmarkIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -59,7 +60,7 @@ export default function ArticlePreview() {
 
             {/* Hero Section avec image */}
             <div className="relative h-[60vh] w-full">
-                <img
+                <Image
                     src={article.image_url || '/placeholder-image.jpg'}
                     alt={article.title}
                     className="w-full h-full object-cover"
