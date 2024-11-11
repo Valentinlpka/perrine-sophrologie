@@ -1,4 +1,3 @@
-// app/articles/preview/page.tsx
 'use client';
 
 import { BookmarkIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
@@ -6,8 +5,9 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
+// Définition de l'interface
 interface PreviewArticle {
     title: string;
     content: string;
@@ -19,22 +19,27 @@ interface PreviewArticle {
     published_at: string;
 }
 
-export default function ArticlePreview() {
-    const [article, setArticle] = useState<PreviewArticle | null>(null);
+// Composant qui utilise useSearchParams
+const PreviewContent = () => {
     const searchParams = useSearchParams();
+    const [article, setArticle] = useState<PreviewArticle | null>(null);
 
     useEffect(() => {
-        const articleData = {
-            title: decodeURIComponent(searchParams.get('title') || ''),
-            content: decodeURIComponent(searchParams.get('content') || ''),
-            image_url: decodeURIComponent(searchParams.get('image_url') || ''),
-            description: decodeURIComponent(searchParams.get('description') || ''),
-            author_name: decodeURIComponent(searchParams.get('author_name') || ''),
-            reading_time: parseInt(searchParams.get('reading_time') || '0'),
-            category: decodeURIComponent(searchParams.get('category') || ''),
-            published_at: searchParams.get('published_at') || new Date().toISOString(),
-        };
-        setArticle(articleData);
+        try {
+            const articleData = {
+                title: decodeURIComponent(searchParams.get('title') || ''),
+                content: decodeURIComponent(searchParams.get('content') || ''),
+                image_url: decodeURIComponent(searchParams.get('image_url') || ''),
+                description: decodeURIComponent(searchParams.get('description') || ''),
+                author_name: decodeURIComponent(searchParams.get('author_name') || ''),
+                reading_time: parseInt(searchParams.get('reading_time') || '0'),
+                category: decodeURIComponent(searchParams.get('category') || ''),
+                published_at: searchParams.get('published_at') || new Date().toISOString(),
+            };
+            setArticle(articleData);
+        } catch (error) {
+            console.error('Erreur lors du décodage des paramètres:', error);
+        }
     }, [searchParams]);
 
     if (!article) {
@@ -46,15 +51,15 @@ export default function ArticlePreview() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <>
             {/* Bannière d'aperçu */}
-            <div className="bg-indigo-600 text-white px-4 py-2 text-center">
+            <div className="bg-indigo-600 text-white px-4 py-2 text-center sticky top-0 z-50">
                 Mode aperçu - Les modifications ne sont pas enregistrées
                 <button
                     onClick={() => window.close()}
                     className="ml-4 px-3 py-1 bg-white text-indigo-600 rounded-md text-sm hover:bg-indigo-50"
                 >
-                    Fermer l'aperçu
+                    Fermer l&apos;aperçu
                 </button>
             </div>
 
@@ -63,7 +68,8 @@ export default function ArticlePreview() {
                 <Image
                     src={article.image_url || '/placeholder-image.jpg'}
                     alt={article.title}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
@@ -103,7 +109,9 @@ export default function ArticlePreview() {
                 <div className="max-w-4xl mx-auto px-4 py-8">
                     <div className="flex flex-wrap items-center justify-between text-sm text-gray-600">
                         <div className="flex items-center space-x-4">
-                            <span>Publié le {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: fr })}</span>
+                            <span>
+                                Publié le {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: fr })}
+                            </span>
                             <span>•</span>
                             <span>{article.reading_time} min de lecture</span>
                         </div>
@@ -115,6 +123,23 @@ export default function ArticlePreview() {
                     </div>
                 </div>
             </footer>
+        </>
+    );
+};
+
+// Composant principal avec Suspense
+export default function ArticlePreview() {
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <Suspense
+                fallback={
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+                    </div>
+                }
+            >
+                <PreviewContent />
+            </Suspense>
         </div>
     );
 }
