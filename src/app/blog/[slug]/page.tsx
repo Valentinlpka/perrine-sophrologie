@@ -57,7 +57,7 @@ export async function generateMetadata(
 }
 
 export default async function BlogArticlePage({ params }: ArticleMetadataProps) {
-    const { data: initialArticle } = await supabase
+    const { } = await supabase
         .from('articles')
         .select('*')
         .eq('slug', params.slug)
