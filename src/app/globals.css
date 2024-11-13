@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -8,9 +8,6 @@
   --background: #ffffff;
   --foreground: #171717;
 }
-
-
-
 
 body {
   color: var(--foreground);
@@ -87,52 +84,50 @@ body {
   min-height: 200px;
 }
 
-
-
 .prose {
-    @apply max-w-none;
+  @apply max-w-none;
 }
 
 .prose img {
-    @apply rounded-lg shadow-lg my-8;
+  @apply rounded-lg shadow-lg my-8;
 }
 
 .prose h2 {
-    @apply text-2xl font-bold mt-8 mb-4;
+  @apply text-2xl font-bold mt-8 mb-4;
 }
 
 .prose h3 {
-    @apply text-xl font-semibold mt-6 mb-3;
+  @apply text-xl font-semibold mt-6 mb-3;
 }
 
 .prose p {
-    @apply mb-4 leading-relaxed;
+  @apply mb-4 leading-relaxed;
 }
 
 .prose a {
-    @apply text-indigo-600 hover:text-indigo-800 underline;
+  @apply text-indigo-600 hover:text-indigo-800 underline;
 }
 
 .prose blockquote {
-    @apply border-l-4 border-indigo-500 pl-4 italic my-6;
+  @apply border-l-4 border-indigo-500 pl-4 italic my-6;
 }
 
 .prose ul {
-    @apply list-disc pl-6 mb-4;
+  @apply list-disc pl-6 mb-4;
 }
 
 .prose ol {
-    @apply list-decimal pl-6 mb-4;
+  @apply list-decimal pl-6 mb-4;
 }
-
 
 /* Animation de pulsation pour le placeholder de chargement */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
-    opacity: .5;
+    opacity: 0.5;
   }
 }
 
