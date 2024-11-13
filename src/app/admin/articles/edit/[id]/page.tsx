@@ -2,12 +2,13 @@
 
 import ArticleForm from '@/components/ArticleForm';
 import { supabase } from '@/lib/supabase';
-import { Article } from '@/types/article'; // Importez le type Article
+import { Article } from '@/types/article';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function EditArticlePage({ params }: { params: { id: string } }) {
     const [article, setArticle] = useState<Article | null>(null);
+    const [previewImage, setPreviewImage] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -22,9 +23,15 @@ export default function EditArticlePage({ params }: { params: { id: string } }) 
                 console.error('Error fetching article:', error);
                 router.push('/admin/articles');
             } else {
-                setArticle(data as Article);  // Cast data to Article type
+                const { image } = data as Article;
+                if (image) {
+                    const { data: { publicUrl } } = await supabase.storage.from('images').getPublicUrl(image);
+                    setPreviewImage(publicUrl);
+                }
+                setArticle(data as Article);
             }
         }
+
         fetchArticle();
     }, [params.id, router]);
 
@@ -33,7 +40,7 @@ export default function EditArticlePage({ params }: { params: { id: string } }) 
     return (
         <div className="container mx-auto px-4">
             <h1 className="text-3xl font-bold my-4">Editer l&apos;article</h1>
-            <ArticleForm article={article} />
+            <ArticleForm article={article} previewImage={previewImage} />
         </div>
     );
 }

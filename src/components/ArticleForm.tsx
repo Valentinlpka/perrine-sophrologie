@@ -1,4 +1,3 @@
-// components/ArticleForm.tsx
 import { supabase } from '@/lib/supabase';
 import { Switch } from '@headlessui/react';
 import { DocumentDuplicateIcon, EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -25,18 +24,19 @@ const ReadOnlyField: React.FC<{
     </div>
 );
 
-
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface ArticleFormProps {
     article?: Article | null;
+    previewImage?: string | null;
+
 }
 
 interface Article {
     id?: number;
     title: string;
     content: string;
-    image_url?: string;
+    image: string | null; // Modifié ici
     is_active: boolean;
     published_at?: string;
     slug: string;
@@ -60,11 +60,11 @@ const QUILL_MODULES = {
 
 const AUTEUR_FIXE = "Perrine Dupriez";
 
-export default function ArticleForm({ article }: ArticleFormProps) {
+export default function ArticleForm({ article, previewImage }: ArticleFormProps) {
     const [titre, setTitre] = useState(article?.title || '');
     const [contenu, setContenu] = useState(article?.content || '');
     const [description, setDescription] = useState(article?.description || '');
-    const [imageUrl, setImageUrl] = useState(article?.image_url || '');
+    const [image, setImage] = useState<File | null>(null); // Modifié ici
     const [categorie, setCategorie] = useState(article?.category || '');
     const [estActif, setEstActif] = useState(article?.is_active || false);
     const [slug, setSlug] = useState(article?.slug || '');
@@ -98,21 +98,46 @@ export default function ArticleForm({ article }: ArticleFormProps) {
         }
     }, [titre, article?.slug]);
 
-    const ouvrirApercu = () => {
+    const ouvrirApercu = async () => {
         const tempsLecture = calculerTempsLecture(contenu.replace(/<[^>]*>/g, ''));
-        const params = new URLSearchParams({
-            title: encodeURIComponent(titre),
-            content: encodeURIComponent(contenu),
-            image_url: encodeURIComponent(imageUrl),
-            description: encodeURIComponent(description),
-            author_name: AUTEUR_FIXE,
-            category: encodeURIComponent(categorie),
-            reading_time: tempsLecture.toString(),
-            published_at: new Date().toISOString()
-        });
 
-        window.open(`/admin/articles/preview?${params.toString()}`, '_blank');
+        if (image) {
+            try {
+                const imageName = `articles/${image.name.replace(/\s/g, '_')}`;
+                const { data, error } = await supabase.storage.from('images').upload(imageName, image, {
+
+                    cacheControl: '3600'
+                }); if (error) {
+                    console.error('Error uploading image:', error.message);
+                    alert('Erreur lors du téléchargement de l\'image : ' + error.message);
+                    return;
+                }
+
+                const { data: { publicUrl } } = await supabase.storage.from('images').getPublicUrl(data.path);
+
+                const params = new URLSearchParams({
+                    title: encodeURIComponent(titre),
+                    content: encodeURIComponent(contenu),
+                    image_url: encodeURIComponent(publicUrl),
+                    description: encodeURIComponent(description),
+
+                    author_name: AUTEUR_FIXE,
+                    category: encodeURIComponent(categorie),
+                    reading_time: tempsLecture.toString(),
+                    published_at: new Date().toISOString()
+                });
+
+                window.open(`/admin/articles/preview?${params.toString()}`, '_blank');
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert('Erreur lors du téléchargement de l\'image : ' + (error as Error).message);
+            }
+        } else {
+            alert('Veuillez sélectionner une image.');
+        }
     };
+
+
 
     const dupliquerArticle = async () => {
         if (article?.id) {
@@ -123,7 +148,7 @@ export default function ArticleForm({ article }: ArticleFormProps) {
             const donneesDupliquees = {
                 title: nouveauTitre,
                 content: contenu,
-                image_url: imageUrl,
+                image: image,
                 is_active: false,
                 published_at: null,
                 slug: nouveauSlug,
@@ -163,13 +188,30 @@ export default function ArticleForm({ article }: ArticleFormProps) {
     const soumettreFormulaire = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const slugFinal = article?.id ? slug : genererSlug(titre); // Utiliser le slug existant en édition
+        const slugFinal = article?.id ? slug : genererSlug(titre);
         const tempsLecture = calculerTempsLecture(contenu.replace(/<[^>]*>/g, ''));
+
+        let imageName: string | null = article?.image || null;
+        if (image) {
+            try {
+                imageName = `articles/${image.name.replace(/\s/g, '_')}`;
+                const { error } = await supabase.storage.from('images').upload(imageName, image);
+                if (error) {
+                    console.error('Error uploading image:', error.message);
+                    alert('Erreur lors du téléchargement de l\'image : ' + error.message);
+                    return;
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                alert('Erreur lors du téléchargement de l\'image : ' + (error as Error).message);
+                return;
+            }
+        }
 
         const donneesArticle = {
             title: titre,
             content: contenu,
-            image_url: imageUrl,
+            image: imageName,
             is_active: estActif,
             published_at: estActif ? new Date().toISOString() : null,
             slug: slugFinal,
@@ -180,21 +222,31 @@ export default function ArticleForm({ article }: ArticleFormProps) {
         };
 
         if (article?.id) {
-            const { error } = await supabase
-                .from('articles')
-                .update(donneesArticle)
-                .eq('id', article.id);
-            if (error) {
-                alert('Erreur lors de la mise à jour: ' + error.message);
-            } else {
-                router.push(`/articles/${slug}`);
+            try {
+                const { error } = await supabase
+                    .from('articles')
+                    .update(donneesArticle)
+                    .eq('id', article.id);
+                if (error) {
+                    alert('Erreur lors de la mise à jour: ' + error.message);
+                } else {
+                    router.push(`/blog/${slug}`);
+                }
+            } catch (error) {
+                console.error('Error updating article:', error);
+                alert('Erreur lors de la mise à jour de l\'article : ' + (error as Error).message);
             }
         } else {
-            const { error } = await supabase.from('articles').insert([donneesArticle]);
-            if (error) {
-                alert('Erreur lors de la création: ' + error.message);
-            } else {
-                router.push(`/articles/${slug}`);
+            try {
+                const { error } = await supabase.from('articles').insert([donneesArticle]);
+                if (error) {
+                    alert('Erreur lors de la création: ' + error.message);
+                } else {
+                    router.push(`/blog/${slug}`);
+                }
+            } catch (error) {
+                console.error('Error creating article:', error);
+                alert('Erreur lors de la création de l\'article : ' + (error as Error).message);
             }
         }
     };
@@ -238,24 +290,37 @@ export default function ArticleForm({ article }: ArticleFormProps) {
                             <ReadOnlyField
                                 label="Slug URL"
                                 value={slug}
-
                             />
                         </div>
 
                         <div className="relative">
-                            <TextField
-                                label="Image principale"
-                                value={imageUrl}
-                                onChange={(e) => setImageUrl(e.target.value)}
-                                type="url"
-                                placeholder="URL de l'image de couverture"
+                            <label className="block text-sm font-medium text-gray-600 mb-1">
+                                Image principale
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setImage(e.target.files?.[0] || null)}
                             />
-                            {imageUrl && (
+                            {previewImage && (
                                 <div className="mt-2 h-32 w-full rounded-xl overflow-hidden border border-gray-200">
                                     <Image
-                                        src={imageUrl}
+                                        src={previewImage}
                                         alt="Aperçu"
                                         className="h-full w-full object-cover"
+                                        width={400}
+                                        height={300}
+                                    />
+                                </div>
+                            )}
+                            {image && !previewImage && (
+                                <div className="mt-2 h-32 w-full rounded-xl overflow-hidden border border-gray-200">
+                                    <Image
+                                        src={URL.createObjectURL(image)}
+                                        alt="Aperçu"
+                                        className="h-full w-full object-cover"
+                                        width={400}
+                                        height={300}
                                     />
                                 </div>
                             )}

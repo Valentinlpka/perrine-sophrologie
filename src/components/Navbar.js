@@ -29,13 +29,13 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="hidden md:flex items-center space-x-4">
-          <Link href="#services" className="text-black hover:font-bold">
+          <Link href="/#services" className="text-black hover:font-bold">
             Services
           </Link>
-          <Link href="#seances" className="text-black hover:font-bold">
+          <Link href="/#seances" className="text-black hover:font-bold">
             Séances
           </Link>
-          <Link href="#contact" className="text-black hover:font-bold">
+          <Link href="/#contact" className="text-black hover:font-bold">
             Contact
           </Link>
           <Link href="/blog" className="text-black hover:font-bold">

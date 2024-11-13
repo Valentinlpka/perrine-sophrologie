@@ -3,7 +3,7 @@ export interface Article {
   title: string;
   content: string;
   slug: string;
-  image_url?: string;
+  image: string;
   is_active: boolean;
   created_at: string;
   updated_at: string;

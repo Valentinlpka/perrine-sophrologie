@@ -1,0 +1,11 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+Allow: /blog
+Allow: /blog/*
+Allow: /contact
+Disallow: /admin/
+Disallow: /admin/*
+
+# Sitemap
+Sitemap: https://perrine-sophrologie.vercel.app/sitemap.xml
