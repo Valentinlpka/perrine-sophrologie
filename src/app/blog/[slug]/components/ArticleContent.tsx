@@ -31,11 +31,10 @@ interface Article {
 }
 
 interface ArticleContentProps {
-    initialArticle: Article | null;
     slug: string;
 }
 
-export default function ArticleContent({ initialArticle, slug }: ArticleContentProps) {
+export default function ArticleContent({ slug }: ArticleContentProps) {
 
     const [article, setArticle] = useState<Article | null>(null);
     const [articlesRecents, setArticlesRecents] = useState<Article[]>([]);
