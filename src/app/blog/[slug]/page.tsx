@@ -63,5 +63,5 @@ export default async function BlogArticlePage({ params }: ArticleMetadataProps) 
         .eq('slug', params.slug)
         .single();
 
-    return <ArticleContent initialArticle={initialArticle} slug={params.slug} />;
+    return <ArticleContent slug={params.slug} />;
 }
