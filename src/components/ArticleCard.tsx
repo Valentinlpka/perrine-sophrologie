@@ -7,8 +7,8 @@ interface ArticleCardProps {
 export default function ArticleCard({ article }: ArticleCardProps) {
     return (
         <div className="border rounded-lg overflow-hidden shadow-lg">
-            {article.image_url && (
-                <img src={article.image_url} alt={article.title} className="w-full h-48 object-cover" />
+            {article.image && (
+                <img src={article.image} alt={article.title} className="w-full h-48 object-cover" />
             )}
             <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
