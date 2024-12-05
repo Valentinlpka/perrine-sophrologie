@@ -149,7 +149,7 @@ const ContactSection: React.FC = () => {
                     </div>
                 </div>
                 <div className="text-center mt-8 pt-10 text-sm flex justify-center">
-                    <a href="#" className="mr-4 hover:underline">Mentions légales</a>
+                    <a href="/mentions-légales" className="mr-4 hover:underline">Mentions légales</a>
                     <a href="#" className="mr-4 hover:underline">Politique de confidentialité</a>
                     <a href="/code-deontologie" className="mr-4 hover:underline">Code de déontologie</a>
                     <p>© 2024 Perrine Dupriez. Tous droits réservés</p>
