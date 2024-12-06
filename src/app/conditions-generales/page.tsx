@@ -47,7 +47,7 @@ export default function TermsPage() {
                     </p>
                     <p>
                         Le sophrologue déclare et garantit au client être habilité à fournir les prestations de services en qualité de
-                        Sophrologue depuis le 1er mai 2024.
+                        Sophrologue depuis le 1er mai 2024
                     </p>
                 </div>
             )
@@ -260,9 +260,7 @@ export default function TermsPage() {
                 </article>
             ))}
 
-            <footer className="mt-8 text-sm text-gray-600">
-                <p>Dernière mise à jour : {new Date().toLocaleDateString()}</p>
-            </footer>
+
         </div>
     );
 }
